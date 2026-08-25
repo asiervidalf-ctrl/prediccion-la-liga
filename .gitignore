@@ -1,0 +1,13 @@
+.venv/
+.uv-cache/
+.uv-python/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+data/*.db
+data/*.db-shm
+data/*.db-wal
+porra-caralleiro-deploy.zip
+.deploy-staging/

@@ -1,0 +1,25 @@
+[project]
+name = "la-porra-2627"
+version = "0.1.0"
+description = "Web para crear y compartir predicciones de LaLiga 2026/27"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.13,<5",
+    "flask>=3.1,<4",
+    "requests>=2.32,<3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4,<9",
+    "ruff>=0.12,<1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = [".venv", ".uv-cache", ".uv-python"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

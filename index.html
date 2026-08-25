@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#7c3aed" />
+  <meta name="description" content="Crea y comparte tu predicción de La Liga 2026/27." />
+  <title>La Porra 26/27</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Inicio"><span class="brand-ball">●</span> PORRA CARALLEIRO</a>
+    <div class="season">TEMPORADA <strong>26/27</strong></div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="eyebrow"><span></span> ESTAMOS FUERA</div>
+        <h1>Porra<br><em>Caralleiro.</em></h1>
+      <p class="hero-copy">Ordena la clasificación, elige a los protagonistas y deja tu pronóstico firmado antes de que ruede el balón.</p>
+      <div class="hero-meta">
+        <div><span class="meta-label">PARTICIPANTE</span><input id="author" maxlength="30" placeholder="Escribe tu nombre" aria-label="Tu nombre" /></div>
+        <div><span class="meta-label">ESTADO</span><span class="autosave"><i></i> Guardado automático</span></div>
+      </div>
+    </section>
+
+    <nav class="section-nav" aria-label="Secciones">
+      <a href="#clasificacion" class="active"><span>01</span> Clasificación</a>
+      <a href="#honor"><span>02</span> Cuadro de honor</a>
+      <a href="#la-pena"><span>03</span> Predicciones del Caralleiro</a>
+      <a href="#enviar"><span>04</span> Publicar</a>
+    </nav>
+
+    <section id="clasificacion" class="content-section standings-section">
+      <div class="section-heading">
+        <div><span class="kicker">EXPANDE LA ESPALDA</span><h2>Clasificación</h2></div>
+        <p>Arrastra cada equipo hasta el puesto donde crees que terminará. También puedes usar las flechas.</p>
+      </div>
+      <div class="legend"><span><i class="dot champions"></i> Champions</span><span><i class="dot europa"></i> Europa League</span><span><i class="dot conference"></i> Conference</span><span><i class="dot relegation"></i> Descenso</span></div>
+      <div id="teamList" class="team-list" aria-label="Clasificación prevista"></div>
+    </section>
+
+    <section id="honor" class="content-section honors-section">
+      <div class="section-heading light">
+        <div><span class="kicker">ESCOTET FÓRA XA</span><h2>Cuadro de honor</h2></div>
+        <p>QUE YO NO ME VOY A BAJAR, BÁJATE TÚ</p>
+      </div>
+      <div id="awardGrid" class="award-grid"></div>
+    </section>
+
+    <section id="la-pena" class="content-section community-section">
+      <div class="section-heading light">
+        <div><span class="kicker">ESTAMOS FUERA</span><h2>Predicciones del Caralleiro</h2></div>
+        <p>Sin gilipolleces, sin excusas. Si no aciertas nada es porque no tienes ni puta idea de fútbol, no llores.</p>
+      </div>
+      <div class="community-toolbar"><span id="predictionCount">0 PORRAS PUBLICADAS</span><button id="refreshPredictions" class="tag-button">↻ ACTUALIZAR</button></div>
+      <div id="predictionGrid" class="prediction-grid"><div class="empty-state">Todavía no hay porras en el muro.<br><strong>Sé el primero en mojarte.</strong></div></div>
+    </section>
+
+    <section id="enviar" class="content-section submit-section">
+      <div class="submit-card">
+        <span class="kicker">ECHA GASOLINA DANI</span>
+        <h2>Firma tu<br><em>pronóstico.</em></h2>
+        <p>Tu porra se guarda en este dispositivo. Genera un enlace con todas tus elecciones o copia el resumen para mandarlo al grupo.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>PROGRESO</span><strong id="progressText">0 de 7 premios</strong></div>
+          <div class="progress"><span id="progressBar"></span></div>
+        </div>
+        <div class="actions">
+          <button id="shareBtn" class="btn primary">Publicar mi porra <span>↗</span></button>
+          <button id="copyBtn" class="btn secondary">Copiar resumen</button>
+        </div>
+        <button id="resetBtn" class="reset">Reiniciar todas mis elecciones</button>
+      </div>
+      <aside class="rules">
+        <span class="rules-number">90’</span>
+        <h3>Las cuatro<br>del vestuario</h3>
+        <ol><li>Estamos fuera.</li><li>Echa gasolina Dani.</li><li>Escotet fóra xa.</li><li>Expande la espalda.</li></ol>
+      </aside>
+    </section>
+  </main>
+
+  <footer><span>PORRA CARALLEIRO · 2026</span><span>ESTAMOS FUERA</span></footer>
+  <div id="predictionModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <article class="prediction-detail" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" data-close-modal aria-label="Cerrar">×</button>
+      <div id="modalContent"></div>
+      <button id="downloadPoster" class="btn poster-button">↓ DESCARGAR CARTEL PNG</button>
+    </article>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
