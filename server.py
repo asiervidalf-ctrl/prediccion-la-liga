@@ -2,11 +2,14 @@ import json
 import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from flask import Flask, jsonify, request, send_from_directory
 
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE = BASE_DIR / "data" / "predictions.db"
+MADRID_TIMEZONE = ZoneInfo("Europe/Madrid")
+PREDICTION_DEADLINE = datetime(2026, 9, 2, 0, 0, tzinfo=MADRID_TIMEZONE)
 app = Flask(__name__, static_folder=None)
 
 
@@ -34,6 +37,10 @@ def serialize_prediction(row: sqlite3.Row, include_payload: bool = True) -> dict
     return result
 
 
+def predictions_are_open() -> bool:
+    return datetime.now(MADRID_TIMEZONE) < PREDICTION_DEADLINE
+
+
 @app.get("/")
 def index():
     return send_from_directory(BASE_DIR, "index.html")
@@ -48,8 +55,21 @@ def list_predictions():
     return jsonify([serialize_prediction(row) for row in rows])
 
 
+@app.get("/api/status")
+def prediction_status():
+    return jsonify(
+        {
+            "open": predictions_are_open(),
+            "deadline": PREDICTION_DEADLINE.isoformat(),
+            "timezone": "Europe/Madrid",
+        }
+    )
+
+
 @app.post("/api/predictions")
 def create_prediction():
+    if not predictions_are_open():
+        return jsonify({"error": "La porra está cerrada. Estamos fuera."}), 403
     payload = request.get_json(silent=True) or {}
     author = str(payload.get("author", "")).strip()[:30]
     teams = payload.get("teams")

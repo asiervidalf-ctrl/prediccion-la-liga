@@ -107,6 +107,20 @@ document.querySelector('#shareBtn').onclick=async()=>{
 document.querySelector('#resetBtn').onclick=()=>{if(!confirm('¿Seguro que quieres borrar toda tu predicción?'))return;localStorage.removeItem('porra2627');history.replaceState({},'',location.pathname);location.reload()};
 renderTeams();updateProgress();
 
+let predictionWindowOpen=false,deadlineTimer=null;
+function applyPredictionLock(isOpen){
+  predictionWindowOpen=isOpen;document.body.classList.toggle('predictions-closed',!isOpen);
+  document.querySelectorAll('#author,#awardGrid input,#awardGrid select,#shareBtn,#resetBtn').forEach(element=>element.disabled=!isOpen);
+  document.querySelectorAll('.team-row').forEach(row=>row.draggable=isOpen);document.querySelectorAll('.move').forEach(button=>button.disabled=!isOpen||button.disabled);
+}
+function updateDeadlineBanner(deadline,isOpen){
+  const banner=document.querySelector('#deadlineBanner'),target=new Date(deadline),remaining=target-Date.now();
+  if(!isOpen||remaining<=0){banner.innerHTML='<strong>PORRA CERRADA</strong><span>Estamos fuera. Las predicciones ya no se pueden modificar.</span>';applyPredictionLock(false);if(deadlineTimer)clearInterval(deadlineTimer);return}
+  const days=Math.floor(remaining/86400000),hours=Math.floor(remaining%86400000/3600000),minutes=Math.floor(remaining%3600000/60000);banner.innerHTML=`<strong>MERCADO ABIERTO</strong><span>Cierra el 1 de septiembre a las 23:59 · ${days}d ${hours}h ${minutes}m</span>`;applyPredictionLock(true);
+}
+async function loadPredictionStatus(){try{const response=await fetch('/api/status');const status=await response.json();updateDeadlineBanner(status.deadline,status.open);deadlineTimer=setInterval(()=>updateDeadlineBanner(status.deadline,status.open),30000)}catch{document.querySelector('#deadlineBanner').innerHTML='<strong>ESTADO DESCONOCIDO</strong><span>No se publicará nada hasta comprobar la fecha límite.</span>';applyPredictionLock(false)}}
+loadPredictionStatus();
+
 const awardLabels=Object.fromEntries(awards.map(award=>[award.id,award.label]));let activePrediction=null;
 function escapeHtml(value){return String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]))}
 function predictionCard(item,index){const prediction=item.prediction;const champion=prediction.teams[0]?.name||'Sin campeón';const pichichi=prediction.awards.pichichi||'Sin elegir';return `<button class="prediction-card" data-id="${item.id}"><span class="card-index">#${String(index+1).padStart(2,'0')}</span><span class="card-tag">ESTAMOS FUERA</span><h3>${escapeHtml(item.author)}</h3><div class="card-pick"><small>CAMPEÓN</small><strong>${escapeHtml(champion)}</strong></div><div class="card-pick"><small>PICHICHI</small><strong>${escapeHtml(pichichi)}</strong></div><span class="card-open">VER LA PORRA ENTERA ↗</span></button>`}
